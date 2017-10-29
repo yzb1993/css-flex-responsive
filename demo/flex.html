@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0 user-scalable=no">
+	<title>flex与响应式布局实践</title>
+    <style type="text/css">
+
+        *{
+        	padding:0;
+        	margin: 0;
+        }
+    	.text-center{
+    		text-align: center;
+    	}
+
+	    .flex{
+	    	display: flex;
+	    }
+
+	    .flex-xs{
+	    	display: flex;
+	    }
+
+	    .flex-not-xs{
+	    	display: block;
+	    }
+
+	    .inline-flex{
+	    	display: inline-flex;
+	    }
+
+	    .inline-flex-xs{
+	    	display: inline-flex;
+	    }
+
+	    .inline-flex-not-xs{
+	    	display: inline;
+	    }
+
+	    .flex-v{
+	    	flex-direction: column;
+	    }
+
+	    .col-1{
+	    	flex: 1;
+	    }
+	    .col-2{
+	    	flex: 2;
+	    }
+
+	    .no-strink{
+	    	flex-shrink: 0;
+	    }
+
+	    .flex-wrap{
+	    	flex-wrap: wrap;
+	    }
+
+	    .flex-order-1{
+	    	order: 1;
+	    }
+
+	    .flex-order-2{
+	    	order: 2
+	    }
+
+	    .flex-align-center{
+	    	align-items: center;
+	    }
+
+	    .flex-content-center{
+	    	justify-content: center;
+	    }
+
+	    .flex-auto{
+	    	flex: auto;
+	    }
+
+	    .flex-basis-50{
+	    	flex: 1 0 50%;
+	    }
+
+	    .flex-basis-100{
+	    	flex: 1 0 100%;
+	    }
+
+	    .flex-center{
+	    	align-items: center;
+	    	justify-content: center;
+	    }
+
+	    .flex-content-end{
+	    	justify-content: flex-end;
+	    }
+
+	    .flex-items-end{
+	    	align-items: flex-end;
+	    }
+
+	    .flex-content-between{
+	    	justify-content: space-between;
+	    }
+	    .flex-items-between{
+	    	align-items: space-between;
+	    }
+
+	    .full-height{
+	    	height: 100%;
+	    }
+
+	    @media only screen and (max-width:736px){
+	    	.flex-xs{
+	    		display: block;
+	    	}
+
+	    	.inline-flex-xs{
+	    		display: inline;
+	    	}
+	    }
+
+	    @media only screen and (min-width:735px){
+	    	.flex-not-xs,.inline-flex-not-xs{
+	    		display: flex;
+	    	}
+	    }
+
+    </style>
+	<!-- common style -->
+    <style type="text/css">
+    	header,article,footer{
+        	border: 1px solid black;
+        }
+
+        #root-page{
+        	min-width: 320px;
+        	min-height: 100vh;
+        }
+        .padding-1x{
+        	padding: 0 1em;
+        }
+        .margin-1x{
+        	margin-bottom: 1em;
+        }
+        .footer,.header{
+			padding: 20px;
+			border: 1px solid red;
+		}
+        .article-container{
+        	min-height: 500px;
+        }
+
+        .demo .demo-title{
+			padding: 20px;
+		}
+    </style>
+    <!-- demo 1 style -->
+    <style type="text/css">
+        /*demo 1*/
+    	.demo1 .left-container,.demo1 .right-container{
+    		border: 1px solid red;
+    		height: 100px;
+    		width: 120px;
+    	}
+    	.demo1 .right-container{
+    		overflow: hidden;
+    	}
+    	.demo1 .left-img{
+			width: 80px;
+			height: 80px;
+			background-color: red;
+		}
+		
+
+
+		.demo1 .introduction{	
+			text-overflow:ellipsis;
+			overflow:hidden;
+			white-space:nowrap;
+		}
+    </style>
+    <!-- demo 2 style -->
+    <style type="text/css">
+     .demo2 .left-container{
+     	height: 90px;
+     	border: 1px solid black;
+
+     }
+     .demo2 .center-container{
+     	height: 180px;
+     	border: 1px solid black;
+     }
+     .demo2 .right-container{
+     	height: 90px;
+     	border: 1px solid black;
+     }
+
+     @media only screen and (max-width:736px){
+     	.demo2 .demo2-container{
+     		flex-wrap: wrap;
+     	}
+    	.demo2 .center-container{
+    		order: -1;
+    		flex: 1 0 100%;
+    	}
+     }
+    	
+    </style>
+
+       <!-- demo 3 style -->
+    <style type="text/css">
+     
+     .demo3 .list>.item{
+     	border: 1px solid red;
+     	padding: 20px;
+     }
+     .demo3 .icon{
+		border: 1px solid blue;
+     }
+     .demo3 .icon2{
+     	height: 60px;
+     }
+     .demo3 .icon3{
+     	height: 20px;
+     }
+     .demo3 .icon4{
+     	height: 50px;
+     }
+
+     @media only screen and (max-width:736px){
+     	.demo3 .list>.item{
+			flex-direction: row;
+			justify-content: space-between;
+	     }
+     }
+    	
+    </style>
+
+       <!-- demo 4 style -->
+    <style type="text/css">
+     
+     .demo4 .list>.flex-group>.item{
+     	border: 1px solid red;
+     	padding: 20px;
+     }
+     
+    	
+    </style>
+</head>
+<body>
+<div class="root-page flex flex-v" id="root-page">
+	<header class="header">
+	 	<div class="flex flex-v flex-center full-height">
+    		<h3 class="flex flex-center ">flex与响应式布局实践</h3>
+    		<div class="margin-1x"></div>
+    		<p>Author: yzb1993</p>
+    	</div>
+    	<div class="margin-1x"></div>
+    	<div class=""><span>参考文章:</span><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html">http://www.ruanyifeng.com/blog/2015/07/flex-examples.html</a></div>
+	</header>
+    <article class="article-container col-1">
+    	<section>
+		    <div class="demo demo1">
+		    	<h4 class="demo-title"><p>案例1:</p><p>左边头像宽度固定，右边内容自适应</p></h4>
+		    	<div class="flex">
+		    		<div class="left-container flex flex-center no-strink">
+		    			<div class="left-img flex flex-center">Img</div>
+		    		</div>
+		    		<div class="right-container col-1">
+		    			<div class="right-content padding-1x full-height flex flex-v flex-content-center">
+		    				<p class="title">
+		    					Name
+		    				</p>
+		    				<div class="introduction">
+			    				<span>Introduction (if there has too many words, it will be omitted.)</span>
+		    				</div>
+		    			</div>
+		    		</div>
+		    	</div>
+		    </div>
+    		
+    	</section>
+
+    	<section>
+		    <div class="demo demo2">
+		    	<h4 class="demo-title"><p>案例2:</p><p>响应式切换改变排列顺序</p></h4>
+		    	<div class="demo2-container flex flex-items-end">
+		    		<div class="left-container col-1 flex flex-center">
+		    			left
+		    		</div>
+		    		<div class="center-container col-2 flex flex-center text-center">
+		    			center <br>set the style of order:-1 when width <= mobile's
+		    		</div>
+		    		<div class="right-container col-1 flex flex-center">
+		    			right
+		    		</div>
+		    	</div>
+		    </div>
+    		
+    	</section>
+
+
+    	<section>
+		    <div class="demo demo3">
+		    	<h4 class="demo-title"><p>案例3:</p><p>pc端横向，移动端纵向列表</p></h4>
+		    	<div class="demo3-container list flex-xs">
+		    		<div class="item col-1 flex flex-v flex-align-center flex-content-end">
+		    			<div class="icon icon1">Icon1</div>
+		    			<div class="text">Text1</div>
+		    		</div>
+		    		<div class="item col-1 flex flex-v flex-align-center flex-content-end">
+		    			<div class="icon icon2">Icon2</div>
+		    			<div class="text">Text2</div>
+		    		</div>
+		    		<div class="item col-1 flex flex-v flex-align-center flex-content-end">
+		    			<div class="icon icon3">Icon3</div>
+		    			<div class="text">Text3</div>
+		    		</div>
+		    		<div class="item col-1 flex flex-v flex-align-center flex-content-end">
+		    			<div class="icon icon4">Icon4</div>
+		    			<div class="text">Text4</div>
+		    		</div>
+		    	</div>
+		    </div>
+    		
+    	</section>
+
+    	<section>
+		    <div class="demo demo4">
+		    	<h4 class="demo-title"><p>案例4:</p><p>分组换行</p></h4>
+		    	<div class="demo4-container list flex-xs">
+		    		<div class="flex-group col-1 flex">
+		    			<div class="item col-1 text-center">item1</div>
+		    			<div class="item col-1 text-center">item2</div>
+		    		</div>
+		    		<div class="flex-group col-1 flex">
+		    			<div class="item col-1 text-center">item3</div>
+		    			<div class="item col-1 text-center">item4</div>
+		    		</div>
+		    	</div>
+		    </div>
+    		
+    	</section>
+    	
+    	
+    </article>
+    <footer class="footer flex flex-center">
+    	footer
+    </footer>
+</div>
+</body>
+</html>
